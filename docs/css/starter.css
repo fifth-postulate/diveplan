@@ -1,0 +1,28 @@
+header {
+    padding-bottom: 1ex;
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+label::before {
+    content: " ";
+}
+
+label::after {
+    content: ": ";
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table thead {
+    font-weight: bold;
+}
+
+table thead td {
+    border-bottom-color: black;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
