@@ -36,9 +36,9 @@ header (Plan { mdd, tank, start }) =
         , Html.span [] [ Html.text <| Depth.toString mdd ]
         , Html.label [] [ Html.text "MDT" ]
         , Html.span [] [ Html.text <| Time.toString <| Time.mdt mdd ]
-        , Html.label [] [ Html.text "tank" ]
+        , Html.label [] [ Html.text "Tank" ]
         , Html.span [] [ Html.text <| Volume.toString tank ]
-        , Html.label [] [ Html.text "start" ]
+        , Html.label [] [ Html.text "Start" ]
         , Html.span [] [ Html.text <| Pressure.toString start ]
         ]
 
