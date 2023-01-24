@@ -1,6 +1,6 @@
-module Pressure exposing (Pressure, bar, inBar, oneBar, scale, toString, volume)
+module Measure.Pressure exposing (Pressure, bar, inBar, oneBar, scale, toString, volume)
 
-import Volume exposing (Volume)
+import Measure.Volume as Volume exposing (Volume)
 
 
 type Pressure

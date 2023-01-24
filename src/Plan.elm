@@ -1,11 +1,12 @@
 module Plan exposing (Plan, plan, view)
 
 import Air
-import Depth exposing (Depth)
 import Html exposing (Html)
-import Pressure exposing (Pressure)
-import Time
-import Volume exposing (Volume)
+import Measure.Depth exposing (Depth)
+import Measure.Pressure exposing (Pressure)
+import Measure.Time as Time
+import Measure.Volume exposing (Volume)
+import Time as DiveTime
 
 
 type Plan
@@ -33,13 +34,13 @@ header : Plan -> Html msg
 header (Plan { mdd, tank, start }) =
     Html.header []
         [ Html.label [] [ Html.text "MDD" ]
-        , Html.span [] [ Html.text <| Depth.toString mdd ]
+        , Html.span [] [ Html.text <| Measure.Depth.toString mdd ]
         , Html.label [] [ Html.text "MDT" ]
-        , Html.span [] [ Html.text <| Time.toString <| Time.mdt mdd ]
+        , Html.span [] [ Html.text <| Time.toString <| DiveTime.mdt mdd ]
         , Html.label [] [ Html.text "Tank" ]
-        , Html.span [] [ Html.text <| Volume.toString tank ]
+        , Html.span [] [ Html.text <| Measure.Volume.toString tank ]
         , Html.label [] [ Html.text "Start" ]
-        , Html.span [] [ Html.text <| Pressure.toString start ]
+        , Html.span [] [ Html.text <| Measure.Pressure.toString start ]
         ]
 
 

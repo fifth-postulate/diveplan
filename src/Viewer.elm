@@ -1,14 +1,14 @@
 module Viewer exposing (..)
 
 import Browser
-import Depth exposing (meter)
 import Html exposing (Html)
 import Html.Attributes as Attribute
 import Html.Events as Event
+import Measure.Depth exposing (meter)
+import Measure.Pressure exposing (bar)
+import Measure.Volume exposing (liter)
 import Plan exposing (Plan, plan)
-import Pressure exposing (bar)
 import Time
-import Volume exposing (liter)
 
 
 main =
@@ -87,7 +87,7 @@ header model =
         [ Html.label [] [ Html.text "MDD" ]
         , Html.input [ Attribute.type_ "text", Attribute.value model.mdd, Event.onInput UpdateMDD ] []
         , Html.label [] [ Html.text "Tank" ]
-        , Html.select [ Event.onInput UpdateTank]
+        , Html.select [ Event.onInput UpdateTank ]
             [ Html.option [ Attribute.value "10", Attribute.selected <| model.tank == "10" ] [ Html.text "10l" ]
             , Html.option [ Attribute.value "12", Attribute.selected <| model.tank == "12" ] [ Html.text "12l" ]
             , Html.option [ Attribute.value "15", Attribute.selected <| model.tank == "15" ] [ Html.text "15l" ]

@@ -1,4 +1,4 @@
-module Depth exposing (Depth, compare, inMeters, meter, toString, zero)
+module Measure.Depth exposing (Depth, compare, inMeters, meter, toString, zero)
 
 import Basics exposing (Order)
 

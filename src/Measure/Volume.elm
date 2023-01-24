@@ -1,4 +1,4 @@
-module Volume exposing (Volume, add, factor, inLiters, liter, oneLiter, scale, toString)
+module Measure.Volume exposing (Volume, add, factor, inLiters, liter, oneLiter, scale, toString)
 
 
 type Volume
