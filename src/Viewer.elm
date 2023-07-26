@@ -1,6 +1,7 @@
 module Viewer exposing (..)
 
 import Browser
+import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import Html.Styled.Events as Event
@@ -83,16 +84,24 @@ view model =
 header : Model -> Html Msg
 header model =
     let
+        labelStyle : List Style
+        labelStyle =
+            [ after [ property "content" "':'" ] ]
+
+        inputStyle : List Style
+        inputStyle =
+            [ marginLeft <| px 3, marginRight <| px 5 ]
+
         tankOption volume =
             Html.option [ Attribute.value volume, Attribute.selected <| model.tank == volume ] [ Html.text <| volume ++ "l" ]
     in
     Html.header []
-        [ Html.label [] [ Html.text "MDD" ]
-        , Html.input [ Attribute.type_ "text", Attribute.size 6, Attribute.value model.mdd, Event.onInput UpdateMDD ] []
-        , Html.label [] [ Html.text "Tank" ]
-        , Html.select [ Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
-        , Html.label [] [ Html.text "Start" ]
-        , Html.input [ Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
+        [ Html.label [ Attribute.css labelStyle ] [ Html.text "MDD" ]
+        , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.mdd, Event.onInput UpdateMDD ] []
+        , Html.label [ Attribute.css labelStyle ] [ Html.text "Tank" ]
+        , Html.select [ Attribute.css inputStyle, Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
+        , Html.label [ Attribute.css labelStyle ] [ Html.text "Start" ]
+        , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
         ]
 
 

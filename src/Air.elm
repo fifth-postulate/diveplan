@@ -1,6 +1,8 @@
 module Air exposing (Tank, plan)
 
+import Css exposing (..)
 import Html.Styled as Html exposing (Html)
+import Html.Styled.Attributes as Attribute
 import Measure.Pressure as Pressure exposing (Pressure)
 import Measure.Volume as Volume exposing (Volume, oneLiter)
 
@@ -56,12 +58,20 @@ details { volume, start } =
 
 view : Plan -> Html msg
 view (Plan { reserve, rise, minimum, halve, tank }) =
-    Html.table []
-        [ Html.thead []
+    let
+        headerTdStyle : List Style
+        headerTdStyle =
+            [ borderBottomStyle solid
+            , borderBottomColor <| rgb 0 0 0
+            , borderBottomWidth <| px 1
+            ]
+    in
+    Html.table [ Attribute.css [ borderCollapse collapse ] ]
+        [ Html.thead [ Attribute.css [ fontWeight bold ] ]
             [ Html.tr []
-                [ Html.td [] [ Html.text "Categorie" ]
-                , Html.td [] [ Html.text "Volume" ]
-                , Html.td [] [ Html.text "Druk" ]
+                [ Html.td [ Attribute.css headerTdStyle ] [ Html.text "Categorie" ]
+                , Html.td [ Attribute.css headerTdStyle ] [ Html.text "Volume" ]
+                , Html.td [ Attribute.css headerTdStyle ] [ Html.text "Druk" ]
                 ]
             ]
         , Html.tbody []
