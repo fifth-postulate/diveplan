@@ -6,7 +6,7 @@ import Measure.Depth exposing (Depth)
 import Measure.Pressure exposing (Pressure)
 import Measure.Time as Time
 import Measure.Volume exposing (Volume)
-import Time as DiveTime
+import Plan.DiveTime as DiveTime
 
 
 type Plan
@@ -48,7 +48,7 @@ body : Plan -> Html msg
 body (Plan { tank, start }) =
     let
         configuration =
-            { tank = tank, start = start }
+            { volume = tank, start = start }
     in
     Html.main_ []
         [ Air.plan configuration

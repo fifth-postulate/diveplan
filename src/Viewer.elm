@@ -8,7 +8,7 @@ import Measure.Depth exposing (meter)
 import Measure.Pressure exposing (bar)
 import Measure.Volume exposing (liter)
 import Plan exposing (Plan, plan)
-import Time
+import Plan.DiveTime
 
 
 main =

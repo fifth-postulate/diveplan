@@ -1,4 +1,4 @@
-module Time exposing (mdt)
+module Plan.DiveTime exposing (mdt)
 
 import Basics
 import Measure.Depth as Depth exposing (Depth, meter)
