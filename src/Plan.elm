@@ -1,7 +1,7 @@
 module Plan exposing (Plan, plan, view)
 
 import Air
-import Html exposing (Html)
+import Html.Styled as Html exposing (Html)
 import Measure.Depth exposing (Depth)
 import Measure.Pressure exposing (Pressure)
 import Measure.Time as Time

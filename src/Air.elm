@@ -1,6 +1,6 @@
 module Air exposing (Tank, plan)
 
-import Html exposing (Html)
+import Html.Styled as Html exposing (Html)
 import Measure.Pressure as Pressure exposing (Pressure)
 import Measure.Volume as Volume exposing (Volume, oneLiter)
 

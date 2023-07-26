@@ -1,14 +1,13 @@
 module Viewer exposing (..)
 
 import Browser
-import Html exposing (Html)
-import Html.Attributes as Attribute
-import Html.Events as Event
+import Html.Styled as Html exposing (Html)
+import Html.Styled.Attributes as Attribute
+import Html.Styled.Events as Event
 import Measure.Depth exposing (meter)
 import Measure.Pressure exposing (bar)
 import Measure.Volume exposing (liter)
 import Plan exposing (Plan, plan)
-import Plan.DiveTime
 
 
 main =
@@ -18,7 +17,7 @@ main =
     in
     Browser.sandbox
         { init = model
-        , view = view
+        , view = view >> Html.toUnstyled
         , update = update
         }
 
