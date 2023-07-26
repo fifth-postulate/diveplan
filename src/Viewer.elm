@@ -83,15 +83,15 @@ view model =
 
 header : Model -> Html Msg
 header model =
+    let
+        tankOption volume =
+            Html.option [ Attribute.value volume, Attribute.selected <| model.tank == volume ] [ Html.text <| volume ++ "l" ]
+    in
     Html.header []
         [ Html.label [] [ Html.text "MDD" ]
         , Html.input [ Attribute.type_ "text", Attribute.value model.mdd, Event.onInput UpdateMDD ] []
         , Html.label [] [ Html.text "Tank" ]
-        , Html.select [ Event.onInput UpdateTank ]
-            [ Html.option [ Attribute.value "10", Attribute.selected <| model.tank == "10" ] [ Html.text "10l" ]
-            , Html.option [ Attribute.value "12", Attribute.selected <| model.tank == "12" ] [ Html.text "12l" ]
-            , Html.option [ Attribute.value "15", Attribute.selected <| model.tank == "15" ] [ Html.text "15l" ]
-            ]
+        , Html.select [ Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
         , Html.label [] [ Html.text "Start" ]
         , Html.input [ Attribute.type_ "text", Attribute.value model.start, Event.onInput UpdateStart ] []
         ]
