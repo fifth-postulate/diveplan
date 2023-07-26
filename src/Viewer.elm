@@ -88,11 +88,11 @@ header model =
     in
     Html.header []
         [ Html.label [] [ Html.text "MDD" ]
-        , Html.input [ Attribute.type_ "text", Attribute.value model.mdd, Event.onInput UpdateMDD ] []
+        , Html.input [ Attribute.type_ "text", Attribute.size 6, Attribute.value model.mdd, Event.onInput UpdateMDD ] []
         , Html.label [] [ Html.text "Tank" ]
         , Html.select [ Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
         , Html.label [] [ Html.text "Start" ]
-        , Html.input [ Attribute.type_ "text", Attribute.value model.start, Event.onInput UpdateStart ] []
+        , Html.input [ Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
         ]
 
 
