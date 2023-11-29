@@ -3,6 +3,7 @@ module Air exposing (Tank, plan)
 import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
+import I8n exposing (Labels)
 import Measure.Pressure as Pressure exposing (Pressure)
 import Measure.Volume as Volume exposing (Volume, oneLiter)
 
@@ -13,9 +14,9 @@ type alias Tank =
     }
 
 
-plan : Tank -> Html msg
-plan configuration =
-    view <| details configuration
+plan : Labels -> Tank -> Html msg
+plan labels configuration =
+    view labels <| details configuration
 
 
 type Plan
@@ -56,8 +57,8 @@ details { volume, start } =
         }
 
 
-view : Plan -> Html msg
-view (Plan { reserve, rise, minimum, halve, tank }) =
+view : Labels -> Plan -> Html msg
+view labels (Plan { reserve, rise, minimum, halve, tank }) =
     let
         headerTdStyle : List Style
         headerTdStyle =
@@ -69,29 +70,29 @@ view (Plan { reserve, rise, minimum, halve, tank }) =
     Html.table [ Attribute.css [ borderCollapse collapse ] ]
         [ Html.thead [ Attribute.css [ fontWeight bold ] ]
             [ Html.tr []
-                [ Html.td [ Attribute.css headerTdStyle ] [ Html.text "Categorie" ]
-                , Html.td [ Attribute.css headerTdStyle ] [ Html.text "Volume" ]
-                , Html.td [ Attribute.css headerTdStyle ] [ Html.text "Druk" ]
+                [ Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.category ]
+                , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.volume ]
+                , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.pressure ]
                 ]
             ]
         , Html.tbody []
             [ Html.tr []
-                [ Html.td [] [ Html.text "Reserve" ]
+                [ Html.td [] [ Html.text labels.reserve ]
                 , Html.td [] [ Html.text <| Volume.toString reserve ]
                 , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor reserve tank) Pressure.oneBar ]
                 ]
             , Html.tr []
-                [ Html.td [] [ Html.text "Opstijging" ]
+                [ Html.td [] [ Html.text labels.rise ]
                 , Html.td [] [ Html.text <| Volume.toString rise ]
                 , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor rise tank) Pressure.oneBar ]
                 ]
             , Html.tr []
-                [ Html.td [] [ Html.text "Minimum" ]
+                [ Html.td [] [ Html.text labels.minimum ]
                 , Html.td [] [ Html.text <| Volume.toString minimum ]
                 , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor minimum tank) Pressure.oneBar ]
                 ]
             , Html.tr []
-                [ Html.td [] [ Html.text "Omkeerdruk" ]
+                [ Html.td [] [ Html.text labels.return ]
                 , Html.td [] [ Html.text <| Volume.toString halve ]
                 , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor halve tank) Pressure.oneBar ]
                 ]

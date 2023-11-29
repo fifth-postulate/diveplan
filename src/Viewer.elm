@@ -5,6 +5,7 @@ import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import Html.Styled.Events as Event
+import I8n exposing (Labels)
 import Measure.Depth exposing (meter)
 import Measure.Pressure exposing (bar)
 import Measure.Volume exposing (liter)
@@ -18,7 +19,7 @@ main =
     in
     Browser.sandbox
         { init = model
-        , view = view >> Html.toUnstyled
+        , view = view I8n.en >> Html.toUnstyled
         , update = update
         }
 
@@ -49,8 +50,8 @@ update msg model =
             { model | start = start }
 
 
-view : Model -> Html Msg
-view model =
+view : Labels -> Model -> Html Msg
+view labels model =
     let
         depth =
             model.mdd
@@ -76,13 +77,13 @@ view model =
                     Nothing
     in
     Html.div []
-        [ header model
-        , viewPlan plan
+        [ header labels model
+        , viewPlan labels plan
         ]
 
 
-header : Model -> Html Msg
-header model =
+header : Labels -> Model -> Html Msg
+header labels model =
     let
         labelStyle : List Style
         labelStyle =
@@ -96,21 +97,21 @@ header model =
             Html.option [ Attribute.value volume, Attribute.selected <| model.tank == volume ] [ Html.text <| volume ++ "l" ]
     in
     Html.header []
-        [ Html.label [ Attribute.css labelStyle ] [ Html.text "MDD" ]
+        [ Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdd ]
         , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.mdd, Event.onInput UpdateMDD ] []
-        , Html.label [ Attribute.css labelStyle ] [ Html.text "Tank" ]
+        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.tank ]
         , Html.select [ Attribute.css inputStyle, Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
-        , Html.label [ Attribute.css labelStyle ] [ Html.text "Start" ]
+        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
         , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
         ]
 
 
-viewPlan : Maybe Plan -> Html msg
-viewPlan pln =
+viewPlan : Labels -> Maybe Plan -> Html msg
+viewPlan labels pln =
     case pln of
         Just p ->
-            Plan.view p
+            Plan.view labels p
 
         Nothing ->
             Html.main_ []
-                [ Html.p [] [ Html.text "Waiting for correct input" ] ]
+                [ Html.p [] [ Html.text labels.waiting ] ]
