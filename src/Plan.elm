@@ -5,14 +5,14 @@ import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import I8n exposing (Labels)
-import Measure.Depth exposing (Depth)
+import Measure.Depth
 import Measure.Pressure
-import Measure.Sac exposing (Sac)
+import Measure.Sac
 import Measure.Time as Time
 import Measure.Volume
 import Plan.DiveTime as DiveTime
-import Plan.Input as Input exposing (Input, mddOf, sacOf, tankOf)
-import Plan.Tank as Tank exposing (Tank)
+import Plan.Input exposing (Input, mddOf, sacOf, tankOf)
+import Plan.Tank as Tank
 
 
 type Plan
@@ -48,9 +48,9 @@ header labels (Plan plan) =
         , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Depth.toString <| mddOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdt ]
         , Html.span [ Attribute.css spanStyle ] [ Html.text <| Time.toString <| DiveTime.mdt <| mddOf plan ]
-        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.tank ]
+        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.volume ]
         , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Volume.toString <| Tank.volume <| tankOf plan ]
-        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
+        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.pressure ]
         , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Pressure.toString <| Tank.pressure <| tankOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.sac ]
         , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Sac.toString <| sacOf plan ]

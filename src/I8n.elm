@@ -11,8 +11,6 @@ type alias Labels =
     , return : String
     , rise : String
     , sac : String
-    , start : String
-    , tank : String
     , volume : String
     , waiting : String
     }
@@ -29,8 +27,6 @@ en =
     , return = "Return"
     , rise = "Rise"
     , sac = "SAC"
-    , start = "Start"
-    , tank = "Tank"
     , volume = "Volume"
     , waiting = "Waiting for correct input"
     }

@@ -8,7 +8,7 @@ import Measure.Depth as Depth
 import Measure.Pressure as Pressure
 import Measure.Volume as Volume exposing (Volume, oneLiter)
 import Plan.Input as Input exposing (Input)
-import Plan.Tank as Tank exposing (Tank)
+import Plan.Tank as Tank
 
 
 plan : Labels -> Input -> Html msg
