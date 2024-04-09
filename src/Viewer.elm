@@ -11,6 +11,7 @@ import Measure.Pressure exposing (bar)
 import Measure.Sac exposing (litersPerMinute)
 import Measure.Volume exposing (liter)
 import Plan exposing (Plan)
+import Plan.Input as Input
 import Plan.Tank as Tank
 
 
@@ -84,8 +85,9 @@ view labels model =
             Tank.tryFrom volume pressure
 
         plan =
-            Plan.tryFrom
-                { depth = depth, tank = tank, rate = rate }
+            { depth = depth, tank = tank, rate = rate }
+                |> Input.tryFrom
+                |> Maybe.map Plan.from
     in
     Html.div []
         [ header labels model

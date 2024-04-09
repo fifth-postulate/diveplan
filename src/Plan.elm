@@ -1,4 +1,4 @@
-module Plan exposing (Plan, from, tryFrom, view)
+module Plan exposing (Plan, from, view)
 
 import Air
 import Css exposing (..)
@@ -11,51 +11,17 @@ import Measure.Sac exposing (Sac)
 import Measure.Time as Time
 import Measure.Volume
 import Plan.DiveTime as DiveTime
+import Plan.Input as Input exposing (Input, mddOf, sacOf, tankOf)
 import Plan.Tank as Tank exposing (Tank)
 
 
 type Plan
-    = Plan
-        { mdd : Depth
-        , tank : Tank
-        , sac : Sac
-        }
+    = Plan Input
 
 
-mddOf : Plan -> Depth
-mddOf (Plan { mdd }) =
-    mdd
-
-
-tankOf : Plan -> Tank
-tankOf (Plan { tank }) =
-    tank
-
-
-sacOf : Plan -> Sac
-sacOf (Plan { sac }) =
-    sac
-
-
-tryFrom :
-    { depth : Maybe Depth
-    , tank : Maybe Tank
-    , rate : Maybe Sac
-    }
-    -> Maybe Plan
-tryFrom { depth, tank, rate } =
-    case ( depth, tank, rate ) of
-        ( Just mdd, Just equipment, Just sac ) ->
-            from mdd equipment sac
-                |> Just
-
-        _ ->
-            Nothing
-
-
-from : Depth -> Tank -> Sac -> Plan
-from mdd tank sac =
-    Plan { mdd = mdd, tank = tank, sac = sac }
+from : Input -> Plan
+from input =
+    Plan input
 
 
 view : Labels -> Plan -> Html msg
@@ -67,7 +33,7 @@ view labels plan =
 
 
 header : Labels -> Plan -> Html msg
-header labels plan =
+header labels (Plan plan) =
     let
         labelStyle : List Style
         labelStyle =
@@ -92,7 +58,7 @@ header labels plan =
 
 
 body : Labels -> Plan -> Html msg
-body labels plan =
+body labels (Plan input) =
     Html.main_ []
-        [ Air.plan labels (tankOf plan)
+        [ Air.plan labels (tankOf input)
         ]
