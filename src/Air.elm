@@ -4,14 +4,16 @@ import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import I8n exposing (Labels)
+import Measure.Depth as Depth
 import Measure.Pressure as Pressure
 import Measure.Volume as Volume exposing (Volume, oneLiter)
+import Plan.Input as Input exposing (Input)
 import Plan.Tank as Tank exposing (Tank)
 
 
-plan : Labels -> Tank -> Html msg
-plan labels configuration =
-    view labels <| details configuration
+plan : Labels -> Input -> Html msg
+plan labels input =
+    view labels <| details input
 
 
 type Plan
@@ -24,11 +26,19 @@ type Plan
         }
 
 
-details : Tank -> Plan
-details tank =
+details : Input -> Plan
+details input =
     let
         volume =
-            Tank.volume tank
+            input
+                |> Input.tankOf
+                |> Tank.volume
+
+        isDeepDive =
+            input
+                |> Input.mddOf
+                |> Depth.inMeters
+                |> (<) 20
 
         reserve =
             Volume.scale 600 oneLiter
@@ -40,7 +50,9 @@ details tank =
             Volume.add reserve rise
 
         total =
-            Tank.airVolume tank
+            input
+                |> Input.tankOf
+                |> Tank.airVolume
 
         halve =
             Volume.add minimum total

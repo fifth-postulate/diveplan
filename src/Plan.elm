@@ -60,5 +60,5 @@ header labels (Plan plan) =
 body : Labels -> Plan -> Html msg
 body labels (Plan input) =
     Html.main_ []
-        [ Air.plan labels (tankOf input)
+        [ Air.plan labels input
         ]
