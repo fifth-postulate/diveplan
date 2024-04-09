@@ -10,7 +10,8 @@ import Measure.Depth exposing (meter)
 import Measure.Pressure exposing (bar)
 import Measure.Sac exposing (litersPerMinute)
 import Measure.Volume exposing (liter)
-import Plan exposing (Plan, plan)
+import Plan exposing (Plan)
+import Plan.Tank as Tank
 
 
 main =
@@ -79,9 +80,12 @@ view labels model =
                 |> String.toInt
                 |> Maybe.andThen litersPerMinute
 
+        tank =
+            Tank.tryFrom volume pressure
+
         plan =
             Plan.fromInput
-                { depth = depth, volume = volume, pressure = pressure, rate = rate }
+                { depth = depth, tank = tank, rate = rate }
     in
     Html.div []
         [ header labels model

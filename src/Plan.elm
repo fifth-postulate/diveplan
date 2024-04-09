@@ -1,4 +1,4 @@
-module Plan exposing (Plan, fromInput, plan, view)
+module Plan exposing (Plan, from, fromInput, view)
 
 import Air
 import Css exposing (..)
@@ -6,18 +6,18 @@ import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import I8n exposing (Labels)
 import Measure.Depth exposing (Depth)
-import Measure.Pressure exposing (Pressure)
+import Measure.Pressure
 import Measure.Sac exposing (Sac)
 import Measure.Time as Time
-import Measure.Volume exposing (Volume)
+import Measure.Volume
 import Plan.DiveTime as DiveTime
+import Plan.Tank as Tank exposing (Tank)
 
 
 type Plan
     = Plan
         { mdd : Depth
-        , tank : Volume
-        , start : Pressure
+        , tank : Tank
         , sac : Sac
         }
 
@@ -27,14 +27,9 @@ mddOf (Plan { mdd }) =
     mdd
 
 
-tankOf : Plan -> Volume
+tankOf : Plan -> Tank
 tankOf (Plan { tank }) =
     tank
-
-
-startOf : Plan -> Pressure
-startOf (Plan { start }) =
-    start
 
 
 sacOf : Plan -> Sac
@@ -44,36 +39,35 @@ sacOf (Plan { sac }) =
 
 fromInput :
     { depth : Maybe Depth
-    , volume : Maybe Volume
-    , pressure : Maybe Pressure
+    , tank : Maybe Tank
     , rate : Maybe Sac
     }
     -> Maybe Plan
-fromInput input =
-    case ( ( input.depth, input.volume ), ( input.pressure, input.rate ) ) of
-        ( ( Just mdd, Just tank ), ( Just start, Just sac ) ) ->
-            plan mdd tank start sac
+fromInput { depth, tank, rate } =
+    case ( depth, tank, rate ) of
+        ( Just mdd, Just equipment, Just sac ) ->
+            from mdd equipment sac
                 |> Just
 
         _ ->
             Nothing
 
 
-plan : Depth -> Volume -> Pressure -> Sac -> Plan
-plan mdd tank start sac =
-    Plan { mdd = mdd, tank = tank, start = start, sac = sac }
+from : Depth -> Tank -> Sac -> Plan
+from mdd tank sac =
+    Plan { mdd = mdd, tank = tank, sac = sac }
 
 
 view : Labels -> Plan -> Html msg
-view labels p =
+view labels plan =
     Html.div [ Attribute.css [ marginTop <| px 5 ] ]
-        [ header labels p
-        , body labels p
+        [ header labels plan
+        , body labels plan
         ]
 
 
 header : Labels -> Plan -> Html msg
-header labels aPlan =
+header labels plan =
     let
         labelStyle : List Style
         labelStyle =
@@ -85,23 +79,26 @@ header labels aPlan =
     in
     Html.header []
         [ Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdd ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Depth.toString <| mddOf aPlan ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Depth.toString <| mddOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdt ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Time.toString <| DiveTime.mdt <| mddOf aPlan ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Time.toString <| DiveTime.mdt <| mddOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.tank ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Volume.toString <| tankOf aPlan ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Volume.toString <| Tank.volume <| tankOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Pressure.toString <| startOf aPlan ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Pressure.toString <| Tank.pressure <| tankOf plan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.sac ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Sac.toString <| sacOf aPlan ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Sac.toString <| sacOf plan ]
         ]
 
 
 body : Labels -> Plan -> Html msg
 body labels aPlan =
     let
+        equipment =
+            tankOf aPlan
+
         configuration =
-            { volume = tankOf aPlan, start = startOf aPlan }
+            { volume = Tank.volume equipment, start = Tank.pressure equipment }
     in
     Html.main_ []
         [ Air.plan labels configuration
