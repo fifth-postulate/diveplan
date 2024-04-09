@@ -1,6 +1,6 @@
-module Plan.Tank exposing (Tank, from, pressure, tryFrom, volume)
+module Plan.Tank exposing (Tank, airVolume, from, pressure, tryFrom, volume)
 
-import Measure.Pressure exposing (Pressure)
+import Measure.Pressure as Pressure exposing (Pressure)
 import Measure.Volume exposing (Volume)
 
 
@@ -35,3 +35,8 @@ volume (Tank tank) =
 pressure : Tank -> Pressure
 pressure (Tank tank) =
     tank.pressure
+
+
+airVolume : Tank -> Volume
+airVolume tank =
+    Pressure.volume (volume tank) (pressure tank)

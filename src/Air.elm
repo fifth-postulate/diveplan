@@ -1,17 +1,12 @@
-module Air exposing (Tank, plan)
+module Air exposing (Plan, plan)
 
 import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import I8n exposing (Labels)
-import Measure.Pressure as Pressure exposing (Pressure)
+import Measure.Pressure as Pressure
 import Measure.Volume as Volume exposing (Volume, oneLiter)
-
-
-type alias Tank =
-    { volume : Volume
-    , start : Pressure
-    }
+import Plan.Tank as Tank exposing (Tank)
 
 
 plan : Labels -> Tank -> Html msg
@@ -30,8 +25,11 @@ type Plan
 
 
 details : Tank -> Plan
-details { volume, start } =
+details tank =
     let
+        volume =
+            Tank.volume tank
+
         reserve =
             Volume.scale 600 oneLiter
 
@@ -42,7 +40,7 @@ details { volume, start } =
             Volume.add reserve rise
 
         total =
-            Pressure.volume volume start
+            Tank.airVolume tank
 
         halve =
             Volume.add minimum total

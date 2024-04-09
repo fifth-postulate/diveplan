@@ -92,14 +92,7 @@ header labels plan =
 
 
 body : Labels -> Plan -> Html msg
-body labels aPlan =
-    let
-        equipment =
-            tankOf aPlan
-
-        configuration =
-            { volume = Tank.volume equipment, start = Tank.pressure equipment }
-    in
+body labels plan =
     Html.main_ []
-        [ Air.plan labels configuration
+        [ Air.plan labels (tankOf plan)
         ]
