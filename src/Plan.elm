@@ -1,4 +1,4 @@
-module Plan exposing (Plan, from, fromInput, view)
+module Plan exposing (Plan, from, tryFrom, view)
 
 import Air
 import Css exposing (..)
@@ -37,13 +37,13 @@ sacOf (Plan { sac }) =
     sac
 
 
-fromInput :
+tryFrom :
     { depth : Maybe Depth
     , tank : Maybe Tank
     , rate : Maybe Sac
     }
     -> Maybe Plan
-fromInput { depth, tank, rate } =
+tryFrom { depth, tank, rate } =
     case ( depth, tank, rate ) of
         ( Just mdd, Just equipment, Just sac ) ->
             from mdd equipment sac

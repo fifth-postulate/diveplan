@@ -17,7 +17,7 @@ import Plan.Tank as Tank
 main =
     let
         model =
-            { mdd = "8", tank = "12", start = "195", sac = "20" }
+            { mdd = "8", volume = "12", pressure = "195", sac = "20" }
     in
     Browser.sandbox
         { init = model
@@ -28,16 +28,16 @@ main =
 
 type alias Model =
     { mdd : String
-    , tank : String
-    , start : String
+    , volume : String
+    , pressure : String
     , sac : String
     }
 
 
 type Msg
     = UpdateMDD String
-    | UpdateTank String
-    | UpdateStart String
+    | UpdateVolume String
+    | UpdatePressure String
     | UpdateSac String
 
 
@@ -47,11 +47,11 @@ update msg model =
         UpdateMDD mdd ->
             { model | mdd = mdd }
 
-        UpdateTank tank ->
-            { model | tank = tank }
+        UpdateVolume tank ->
+            { model | volume = tank }
 
-        UpdateStart start ->
-            { model | start = start }
+        UpdatePressure start ->
+            { model | pressure = start }
 
         UpdateSac sac ->
             { model | sac = sac }
@@ -66,12 +66,12 @@ view labels model =
                 |> Maybe.andThen meter
 
         volume =
-            model.tank
+            model.volume
                 |> String.toInt
                 |> Maybe.andThen liter
 
         pressure =
-            model.start
+            model.pressure
                 |> String.toInt
                 |> Maybe.andThen bar
 
@@ -84,7 +84,7 @@ view labels model =
             Tank.tryFrom volume pressure
 
         plan =
-            Plan.fromInput
+            Plan.tryFrom
                 { depth = depth, tank = tank, rate = rate }
     in
     Html.div []
@@ -105,15 +105,15 @@ header labels model =
             [ marginLeft <| px 3, marginRight <| px 5 ]
 
         tankOption volume =
-            Html.option [ Attribute.value volume, Attribute.selected <| model.tank == volume ] [ Html.text <| volume ++ "l" ]
+            Html.option [ Attribute.value volume, Attribute.selected <| model.volume == volume ] [ Html.text <| volume ++ "l" ]
     in
     Html.header []
         [ Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdd ]
         , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.mdd, Event.onInput UpdateMDD ] []
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.tank ]
-        , Html.select [ Attribute.css inputStyle, Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
+        , Html.select [ Attribute.css inputStyle, Event.onInput UpdateVolume ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
-        , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
+        , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.pressure, Event.onInput UpdatePressure ] []
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.sac ]
         , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.sac, Event.onInput UpdateSac ] []
         ]
