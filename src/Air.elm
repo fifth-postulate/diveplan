@@ -22,7 +22,8 @@ type Plan
         , rise : Volume
         , minimum : Volume
         , halve : Volume
-        , tank : Volume
+        , volume : Volume
+        , total : Volume
         }
 
 
@@ -67,12 +68,13 @@ details input =
         , rise = rise
         , minimum = minimum
         , halve = halve
-        , tank = volume
+        , volume = volume
+        , total = total
         }
 
 
 view : Labels -> Plan -> Html msg
-view labels (Plan { reserve, rise, minimum, halve, tank }) =
+view labels (Plan { reserve, rise, minimum, halve, volume, total }) =
     let
         headerTdStyle : List Style
         headerTdStyle =
@@ -93,22 +95,27 @@ view labels (Plan { reserve, rise, minimum, halve, tank }) =
             [ Html.tr []
                 [ Html.td [] [ Html.text labels.reserve ]
                 , Html.td [] [ Html.text <| Volume.toString reserve ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor reserve tank) Pressure.oneBar ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor reserve volume) Pressure.oneBar ]
                 ]
             , Html.tr []
                 [ Html.td [] [ Html.text labels.rise ]
                 , Html.td [] [ Html.text <| Volume.toString rise ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor rise tank) Pressure.oneBar ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor rise volume) Pressure.oneBar ]
                 ]
             , Html.tr []
                 [ Html.td [] [ Html.text labels.minimum ]
                 , Html.td [] [ Html.text <| Volume.toString minimum ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor minimum tank) Pressure.oneBar ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor minimum volume) Pressure.oneBar ]
                 ]
             , Html.tr []
                 [ Html.td [] [ Html.text labels.return ]
                 , Html.td [] [ Html.text <| Volume.toString halve ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor halve tank) Pressure.oneBar ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor halve volume) Pressure.oneBar ]
+                ]
+            , Html.tr []
+                [ Html.td [] [ Html.text labels.total ]
+                , Html.td [] [ Html.text <| Volume.toString total ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor total volume) Pressure.oneBar ]
                 ]
             ]
         ]
