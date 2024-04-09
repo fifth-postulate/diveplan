@@ -41,7 +41,11 @@ details input =
                 |> (<) 20
 
         reserve =
-            Volume.scale 600 oneLiter
+            if isDeepDive then
+                Volume.scale 900 oneLiter
+
+            else
+                Volume.scale 600 oneLiter
 
         rise =
             Volume.scale 250 oneLiter
