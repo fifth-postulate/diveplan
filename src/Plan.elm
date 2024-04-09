@@ -22,6 +22,26 @@ type Plan
         }
 
 
+mddOf : Plan -> Depth
+mddOf (Plan { mdd }) =
+    mdd
+
+
+tankOf : Plan -> Volume
+tankOf (Plan { tank }) =
+    tank
+
+
+startOf : Plan -> Pressure
+startOf (Plan { start }) =
+    start
+
+
+sacOf : Plan -> Sac
+sacOf (Plan { sac }) =
+    sac
+
+
 fromInput :
     { depth : Maybe Depth
     , volume : Maybe Volume
@@ -32,7 +52,8 @@ fromInput :
 fromInput input =
     case ( ( input.depth, input.volume ), ( input.pressure, input.rate ) ) of
         ( ( Just mdd, Just tank ), ( Just start, Just sac ) ) ->
-            Just <| Plan { mdd = mdd, tank = tank, start = start, sac = sac }
+            plan mdd tank start sac
+                |> Just
 
         _ ->
             Nothing
@@ -52,7 +73,7 @@ view labels p =
 
 
 header : Labels -> Plan -> Html msg
-header labels (Plan { mdd, tank, start, sac }) =
+header labels aPlan =
     let
         labelStyle : List Style
         labelStyle =
@@ -64,23 +85,23 @@ header labels (Plan { mdd, tank, start, sac }) =
     in
     Html.header []
         [ Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdd ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Depth.toString mdd ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Depth.toString <| mddOf aPlan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.mdt ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Time.toString <| DiveTime.mdt mdd ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Time.toString <| DiveTime.mdt <| mddOf aPlan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.tank ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Volume.toString tank ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Volume.toString <| tankOf aPlan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Pressure.toString start ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Pressure.toString <| startOf aPlan ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.sac ]
-        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Sac.toString sac ]
+        , Html.span [ Attribute.css spanStyle ] [ Html.text <| Measure.Sac.toString <| sacOf aPlan ]
         ]
 
 
 body : Labels -> Plan -> Html msg
-body labels (Plan { tank, start }) =
+body labels aPlan =
     let
         configuration =
-            { volume = tank, start = start }
+            { volume = tankOf aPlan, start = startOf aPlan }
     in
     Html.main_ []
         [ Air.plan labels configuration
