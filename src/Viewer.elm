@@ -8,6 +8,7 @@ import Html.Styled.Events as Event
 import I8n exposing (Labels)
 import Measure.Depth exposing (meter)
 import Measure.Pressure exposing (bar)
+import Measure.Sac exposing (litersPerMinute)
 import Measure.Volume exposing (liter)
 import Plan exposing (Plan, plan)
 
@@ -73,13 +74,14 @@ view labels model =
                 |> String.toInt
                 |> Maybe.andThen bar
 
-        plan =
-            case ( depth, volume, pressure ) of
-                ( Just mdd, Just tank, Just start ) ->
-                    Just <| Plan.plan mdd tank start
+        rate =
+            model.sac
+                |> String.toInt
+                |> Maybe.andThen litersPerMinute
 
-                _ ->
-                    Nothing
+        plan =
+            Plan.fromInput
+                { depth = depth, volume = volume, pressure = pressure, rate = rate }
     in
     Html.div []
         [ header labels model
