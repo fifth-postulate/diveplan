@@ -15,7 +15,7 @@ import Plan exposing (Plan, plan)
 main =
     let
         model =
-            { mdd = "8", tank = "12", start = "195" }
+            { mdd = "8", tank = "12", start = "195", sac = "20" }
     in
     Browser.sandbox
         { init = model
@@ -28,6 +28,7 @@ type alias Model =
     { mdd : String
     , tank : String
     , start : String
+    , sac : String
     }
 
 
@@ -35,6 +36,7 @@ type Msg
     = UpdateMDD String
     | UpdateTank String
     | UpdateStart String
+    | UpdateSac String
 
 
 update : Msg -> Model -> Model
@@ -48,6 +50,9 @@ update msg model =
 
         UpdateStart start ->
             { model | start = start }
+
+        UpdateSac sac ->
+            { model | sac = sac }
 
 
 view : Labels -> Model -> Html Msg
@@ -103,6 +108,8 @@ header labels model =
         , Html.select [ Attribute.css inputStyle, Event.onInput UpdateTank ] <| List.map (String.fromInt >> tankOption) [ 5, 8, 10, 12, 15 ]
         , Html.label [ Attribute.css labelStyle ] [ Html.text labels.start ]
         , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.start, Event.onInput UpdateStart ] []
+        , Html.label [ Attribute.css labelStyle ] [ Html.text labels.sac ]
+        , Html.input [ Attribute.css inputStyle, Attribute.type_ "text", Attribute.size 6, Attribute.value model.sac, Event.onInput UpdateSac ] []
         ]
 
 

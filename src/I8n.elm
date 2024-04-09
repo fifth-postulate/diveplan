@@ -2,33 +2,35 @@ module I8n exposing (Labels, en)
 
 
 type alias Labels =
-    { mdd : String
+    { category : String
+    , mdd : String
     , mdt : String
-    , tank : String
-    , start : String
-    , category : String
-    , volume : String
+    , minimum : String
     , pressure : String
     , reserve : String
-    , rise : String
-    , minimum : String
     , return : String
+    , rise : String
+    , sac : String
+    , start : String
+    , tank : String
+    , volume : String
     , waiting : String
     }
 
 
 en : Labels
 en =
-    { mdd = "MDD"
+    { category = "Category"
+    , mdd = "MDD"
     , mdt = "MDT"
-    , tank = "Tank"
-    , start = "Start"
-    , category = "Category"
-    , volume = "Volume"
+    , minimum = "Minimum"
     , pressure = "Pressure"
     , reserve = "Reserve"
-    , rise = "Rise"
-    , minimum = "Minimum"
     , return = "Return"
+    , rise = "Rise"
+    , sac = "SAC"
+    , start = "Start"
+    , tank = "Tank"
+    , volume = "Volume"
     , waiting = "Waiting for correct input"
     }
