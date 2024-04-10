@@ -74,6 +74,7 @@ view labels model =
         pressure =
             model.pressure
                 |> String.toInt
+                |> Maybe.map toFloat
                 |> Maybe.andThen bar
 
         rate =

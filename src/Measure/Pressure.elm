@@ -4,15 +4,15 @@ import Measure.Volume as Volume exposing (Volume)
 
 
 type Pressure
-    = Bar Int
+    = Bar Float
 
 
 oneBar : Pressure
 oneBar =
-    Bar 1
+    Bar 1.0
 
 
-bar : Int -> Maybe Pressure
+bar : Float -> Maybe Pressure
 bar p =
     if p >= 0 then
         Just <| Bar p
@@ -21,21 +21,21 @@ bar p =
         Nothing
 
 
-inBar : Pressure -> Int
+inBar : Pressure -> Float
 inBar (Bar p) =
     p
 
 
 volume : Volume -> Pressure -> Volume
 volume v (Bar f) =
-    Volume.scale (toFloat f) v
+    Volume.scale f v
 
 
 scale : Float -> Pressure -> Pressure
 scale f (Bar p) =
-    Bar <| round <| f * toFloat p
+    Bar <| f * p
 
 
 toString : Pressure -> String
 toString p =
-    (String.fromInt <| inBar p) ++ "bar"
+    (String.fromInt <| round <| inBar p) ++ "bar"
