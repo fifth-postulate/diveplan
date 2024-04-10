@@ -1,5 +1,6 @@
-module Measure.Pressure exposing (Pressure, bar, inBar, oneBar, scale, toString, volume)
+module Measure.Pressure exposing (Pressure, atDepth, bar, inBar, oneBar, scale, toString, volume)
 
+import Measure.Depth as Depth exposing (Depth)
 import Measure.Volume as Volume exposing (Volume)
 
 
@@ -24,6 +25,23 @@ bar p =
 inBar : Pressure -> Float
 inBar (Bar p) =
     p
+
+
+atDepth : Depth -> Pressure
+atDepth depth =
+    let
+        d =
+            depth
+                |> Depth.inMeters
+                |> toFloat
+
+        relative =
+            d / 10.0
+
+        absolute =
+            1.0 + relative
+    in
+    Bar absolute
 
 
 volume : Volume -> Pressure -> Volume
