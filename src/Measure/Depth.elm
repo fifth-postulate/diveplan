@@ -1,4 +1,4 @@
-module Measure.Depth exposing (Depth, compare, inMeters, meter, toString, zero)
+module Measure.Depth exposing (Depth, compare, five, inMeters, meter, toString, zero)
 
 import Basics exposing (Order)
 
@@ -10,6 +10,11 @@ type Depth
 zero : Depth
 zero =
     Meter 0
+
+
+five : Depth
+five =
+    Meter 5
 
 
 meter : Int -> Maybe Depth
