@@ -1,4 +1,4 @@
-module Measure.Sac exposing (Sac, atDepth, litersPerMinute, times, toString)
+module Measure.Sac exposing (Sac, atDepth, averageDuringRiseFrom, litersPerMinute, oneLiterPerMinute, times, toString)
 
 import Measure.Depth exposing (Depth)
 import Measure.Pressure as Pressure
@@ -8,6 +8,11 @@ import Measure.Volume as Volume exposing (Volume)
 
 type Sac
     = LitersPerMinute Float
+
+
+oneLiterPerMinute : Sac
+oneLiterPerMinute =
+    LitersPerMinute 1
 
 
 litersPerMinute : Float -> Maybe Sac
@@ -40,6 +45,30 @@ atDepth depth (LitersPerMinute sac) =
                 |> Pressure.atDepth
                 |> Pressure.inBar
     in
+    LitersPerMinute (factor * sac)
+
+
+averageDuringRiseFrom : Depth -> Sac -> Sac
+averageDuringRiseFrom depth sac =
+    let
+        pressureAtSurface =
+            Pressure.oneBar
+
+        pressureAtDepth =
+            Pressure.atDepth depth
+
+        factor =
+            Pressure.difference pressureAtDepth pressureAtSurface
+                |> Pressure.scale 0.5
+                |> Pressure.inBar
+                |> (+) 1
+    in
+    sac
+        |> scale factor
+
+
+scale : Float -> Sac -> Sac
+scale factor (LitersPerMinute sac) =
     LitersPerMinute (factor * sac)
 
 

@@ -1,4 +1,4 @@
-module Measure.Pressure exposing (Pressure, atDepth, bar, inBar, oneBar, scale, toString, volume)
+module Measure.Pressure exposing (Pressure, atDepth, bar, difference, inBar, oneBar, scale, toString, volume)
 
 import Measure.Depth as Depth exposing (Depth)
 import Measure.Volume as Volume exposing (Volume)
@@ -46,6 +46,11 @@ atDepth depth =
 volume : Volume -> Pressure -> Volume
 volume v (Bar f) =
     Volume.scale f v
+
+
+difference : Pressure -> Pressure -> Pressure
+difference (Bar left) (Bar right) =
+    Bar (left - right)
 
 
 scale : Float -> Pressure -> Pressure

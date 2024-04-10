@@ -9,6 +9,7 @@ import Measure.Pressure as Pressure
 import Measure.Sac as Sac
 import Measure.Time exposing (threeMinutes)
 import Measure.Volume as Volume exposing (Volume, oneLiter)
+import Plan.DiveTime as DiveTime
 import Plan.Input as Input exposing (Input)
 import Plan.Tank as Tank
 
@@ -33,14 +34,17 @@ type Plan
 details : Input -> Plan
 details input =
     let
+        mdd =
+            input
+                |> Input.mddOf
+
         volume =
             input
                 |> Input.tankOf
                 |> Tank.volume
 
         isDeepDive =
-            input
-                |> Input.mddOf
+            mdd
                 |> Depth.inMeters
                 |> (<) 20
 
@@ -58,7 +62,10 @@ details input =
                 |> Sac.times threeMinutes
 
         rise =
-            Volume.scale 250 oneLiter
+            input
+                |> Input.sacOf
+                |> Sac.averageDuringRiseFrom mdd
+                |> Sac.times (DiveTime.riseFrom mdd)
 
         minimum =
             reserve
