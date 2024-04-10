@@ -2,7 +2,7 @@ module Measure.Time exposing (Time, inMinutes, minutes, oneMinute, times, toStri
 
 
 type Time
-    = Minute Int
+    = Minute Float
 
 
 zero : Time
@@ -15,7 +15,7 @@ oneMinute =
     Minute 1
 
 
-minutes : Int -> Maybe Time
+minutes : Float -> Maybe Time
 minutes t =
     if t >= 0 then
         Just <| Minute t
@@ -24,16 +24,16 @@ minutes t =
         Nothing
 
 
-inMinutes : Time -> Int
+inMinutes : Time -> Float
 inMinutes (Minute t) =
     t
 
 
 toString : Time -> String
 toString t =
-    String.fromInt (inMinutes t) ++ "min"
+    (String.fromInt <| round <| inMinutes t) ++ "min"
 
 
-times : Int -> Time -> Time
+times : Float -> Time -> Time
 times factor (Minute t) =
     Minute (factor * t)
