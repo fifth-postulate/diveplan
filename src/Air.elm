@@ -18,12 +18,13 @@ plan labels input =
 
 type Plan
     = Plan
-        { reserve : Volume
-        , rise : Volume
+        { halve : Volume
         , minimum : Volume
-        , halve : Volume
-        , volume : Volume
+        , reserve : Volume
+        , rise : Volume
+        , stop : Volume
         , total : Volume
+        , volume : Volume
         }
 
 
@@ -48,11 +49,16 @@ details input =
             else
                 Volume.scale 600 oneLiter
 
+        stop =
+            Volume.scale 20 oneLiter
+
         rise =
             Volume.scale 250 oneLiter
 
         minimum =
-            Volume.add reserve rise
+            reserve
+                |> Volume.add rise
+                |> Volume.add stop
 
         total =
             input
@@ -64,17 +70,29 @@ details input =
                 |> Volume.scale 0.5
     in
     Plan
-        { reserve = reserve
-        , rise = rise
+        { halve = halve
         , minimum = minimum
-        , halve = halve
-        , volume = volume
+        , reserve = reserve
+        , rise = rise
+        , stop = stop
         , total = total
+        , volume = volume
         }
 
 
+entries : Labels -> Plan -> List ( String, Volume )
+entries labels (Plan { reserve, rise, minimum, halve, volume, stop, total }) =
+    [ ( labels.reserve, reserve )
+    , ( labels.rise, rise )
+    , ( labels.stop, stop )
+    , ( labels.minimum, minimum )
+    , ( labels.return, halve )
+    , ( labels.total, total )
+    ]
+
+
 view : Labels -> Plan -> Html msg
-view labels (Plan { reserve, rise, minimum, halve, volume, total }) =
+view labels ((Plan { volume }) as aPlan) =
     let
         headerTdStyle : List Style
         headerTdStyle =
@@ -82,6 +100,9 @@ view labels (Plan { reserve, rise, minimum, halve, volume, total }) =
             , borderBottomColor <| rgb 0 0 0
             , borderBottomWidth <| px 1
             ]
+
+        rows =
+            entries labels aPlan
     in
     Html.table [ Attribute.css [ borderCollapse collapse ] ]
         [ Html.thead [ Attribute.css [ fontWeight bold ] ]
@@ -91,31 +112,14 @@ view labels (Plan { reserve, rise, minimum, halve, volume, total }) =
                 , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.pressure ]
                 ]
             ]
-        , Html.tbody []
-            [ Html.tr []
-                [ Html.td [] [ Html.text labels.reserve ]
-                , Html.td [] [ Html.text <| Volume.toString reserve ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor reserve volume) Pressure.oneBar ]
-                ]
-            , Html.tr []
-                [ Html.td [] [ Html.text labels.rise ]
-                , Html.td [] [ Html.text <| Volume.toString rise ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor rise volume) Pressure.oneBar ]
-                ]
-            , Html.tr []
-                [ Html.td [] [ Html.text labels.minimum ]
-                , Html.td [] [ Html.text <| Volume.toString minimum ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor minimum volume) Pressure.oneBar ]
-                ]
-            , Html.tr []
-                [ Html.td [] [ Html.text labels.return ]
-                , Html.td [] [ Html.text <| Volume.toString halve ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor halve volume) Pressure.oneBar ]
-                ]
-            , Html.tr []
-                [ Html.td [] [ Html.text labels.total ]
-                , Html.td [] [ Html.text <| Volume.toString total ]
-                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor total volume) Pressure.oneBar ]
-                ]
-            ]
+        , Html.tbody [] (List.map (viewRow volume) rows)
+        ]
+
+
+viewRow : Volume -> ( String, Volume ) -> Html msg
+viewRow volume ( label, value ) =
+    Html.tr []
+        [ Html.td [] [ Html.text label ]
+        , Html.td [] [ Html.text <| Volume.toString value ]
+        , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor value volume) Pressure.oneBar ]
         ]
