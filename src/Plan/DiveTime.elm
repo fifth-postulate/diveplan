@@ -24,7 +24,7 @@ table =
     , ( meter 12, minutes 150 )
     , ( meter 9, minutes 300 )
     ]
-        |> List.map (Tuple.mapBoth (Maybe.withDefault Depth.zero) (Maybe.withDefault Time.zero))
+        |> List.map (Tuple.mapBoth (Maybe.withDefault Depth.zeroMeters) (Maybe.withDefault Time.zero))
 
 
 mdt : Depth -> Time

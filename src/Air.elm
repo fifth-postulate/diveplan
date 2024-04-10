@@ -4,8 +4,10 @@ import Css exposing (..)
 import Html.Styled as Html exposing (Html)
 import Html.Styled.Attributes as Attribute
 import I8n exposing (Labels)
-import Measure.Depth as Depth
+import Measure.Depth as Depth exposing (fiveMeters)
 import Measure.Pressure as Pressure
+import Measure.Sac as Sac
+import Measure.Time exposing (threeMinutes)
 import Measure.Volume as Volume exposing (Volume, oneLiter)
 import Plan.Input as Input exposing (Input)
 import Plan.Tank as Tank
@@ -50,7 +52,10 @@ details input =
                 Volume.scale 600 oneLiter
 
         stop =
-            Volume.scale 20 oneLiter
+            input
+                |> Input.sacOf
+                |> Sac.atDepth fiveMeters
+                |> Sac.times threeMinutes
 
         rise =
             Volume.scale 250 oneLiter

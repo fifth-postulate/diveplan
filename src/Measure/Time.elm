@@ -1,4 +1,4 @@
-module Measure.Time exposing (Time, inMinutes, minutes, oneMinute, times, toString, zero)
+module Measure.Time exposing (Time, inMinutes, minutes, oneMinute, threeMinutes, times, toString, zero)
 
 
 type Time
@@ -13,6 +13,11 @@ zero =
 oneMinute : Time
 oneMinute =
     Minute 1
+
+
+threeMinutes : Time
+threeMinutes =
+    Minute 3
 
 
 minutes : Float -> Maybe Time
