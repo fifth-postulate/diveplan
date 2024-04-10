@@ -69,6 +69,7 @@ view labels model =
         volume =
             model.volume
                 |> String.toInt
+                |> Maybe.map toFloat
                 |> Maybe.andThen liter
 
         pressure =

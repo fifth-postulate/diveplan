@@ -2,7 +2,7 @@ module Measure.Volume exposing (Volume, add, factor, inLiters, liter, oneLiter, 
 
 
 type Volume
-    = Liter Int
+    = Liter Float
 
 
 oneLiter : Volume
@@ -10,7 +10,7 @@ oneLiter =
     Liter 1
 
 
-liter : Int -> Maybe Volume
+liter : Float -> Maybe Volume
 liter v =
     if v >= 0 then
         Just <| Liter v
@@ -19,14 +19,14 @@ liter v =
         Nothing
 
 
-inLiters : Volume -> Int
+inLiters : Volume -> Float
 inLiters (Liter v) =
     v
 
 
 toString : Volume -> String
 toString v =
-    (String.fromInt <| inLiters v) ++ "l"
+    (String.fromInt <| round <| inLiters v) ++ "l"
 
 
 add : Volume -> Volume -> Volume
@@ -36,9 +36,9 @@ add (Liter u) (Liter v) =
 
 factor : Volume -> Volume -> Float
 factor (Liter u) (Liter v) =
-    toFloat u / toFloat v
+    u / v
 
 
 scale : Float -> Volume -> Volume
 scale f (Liter v) =
-    Liter <| round <| f * toFloat v
+    Liter (f * v)
