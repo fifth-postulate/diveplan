@@ -2,10 +2,10 @@ module Measure.Sac exposing (Sac, litersPerMinute, toString)
 
 
 type Sac
-    = LitersPerMinute Int
+    = LitersPerMinute Float
 
 
-litersPerMinute : Int -> Maybe Sac
+litersPerMinute : Float -> Maybe Sac
 litersPerMinute sac =
     if sac >= 0 then
         sac
@@ -18,4 +18,4 @@ litersPerMinute sac =
 
 toString : Sac -> String
 toString (LitersPerMinute sac) =
-    String.fromInt sac ++ "l/min"
+    (String.fromInt <| round <| sac) ++ "l/min"

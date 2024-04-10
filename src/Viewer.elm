@@ -81,6 +81,7 @@ view labels model =
         rate =
             model.sac
                 |> String.toInt
+                |> Maybe.map toFloat
                 |> Maybe.andThen litersPerMinute
 
         tank =
