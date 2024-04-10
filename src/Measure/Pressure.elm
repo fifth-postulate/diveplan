@@ -33,7 +33,6 @@ atDepth depth =
         d =
             depth
                 |> Depth.inMeters
-                |> toFloat
 
         relative =
             d / 10.0

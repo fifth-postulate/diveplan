@@ -4,7 +4,7 @@ import Basics exposing (Order)
 
 
 type Depth
-    = Meter Int
+    = Meter Float
 
 
 zeroMeters : Depth
@@ -17,7 +17,7 @@ fiveMeters =
     Meter 5
 
 
-meter : Int -> Maybe Depth
+meter : Float -> Maybe Depth
 meter depth =
     if depth >= 0 then
         Just <| Meter depth
@@ -26,14 +26,14 @@ meter depth =
         Nothing
 
 
-inMeters : Depth -> Int
+inMeters : Depth -> Float
 inMeters (Meter d) =
     d
 
 
 toString : Depth -> String
 toString depth =
-    (String.fromInt <| inMeters depth) ++ "m"
+    (String.fromInt <| round <| inMeters depth) ++ "m"
 
 
 compare : Depth -> Depth -> Order

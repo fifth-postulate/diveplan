@@ -64,6 +64,7 @@ view labels model =
         depth =
             model.mdd
                 |> String.toInt
+                |> Maybe.map toFloat
                 |> Maybe.andThen meter
 
         volume =
