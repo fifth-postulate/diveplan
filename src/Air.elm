@@ -94,14 +94,12 @@ details input =
 
 type Entry
     = Single String Volume
+    | Compound String (List ( String, Volume ))
 
 
 entries : Labels -> Plan -> List Entry
 entries labels (Plan { reserve, rise, minimum, halve, stop, total }) =
-    [ Single labels.reserve reserve
-    , Single labels.rise rise
-    , Single labels.stop stop
-    , Single labels.minimum minimum
+    [ Compound labels.minimum [ ( labels.reserve, reserve ), ( labels.rise, rise ), ( labels.stop, stop ) ]
     , Single labels.return halve
     , Single labels.total total
     ]
@@ -112,6 +110,11 @@ volumeOf entry =
     case entry of
         Single _ v ->
             v
+
+        Compound _ components ->
+            components
+                |> List.map Tuple.second
+                |> List.foldl Volume.add Volume.zeroLiter
 
 
 view : Labels -> Plan -> Html msg
@@ -136,18 +139,21 @@ view labels ((Plan { tankVolume }) as aPlan) =
                 , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.pressure ]
                 ]
             ]
-        , Html.tbody [] (List.map (viewRow tankVolume) rows)
+        , Html.tbody [] (List.concatMap (viewRow tankVolume) rows)
         ]
 
 
-viewRow : Volume -> Entry -> Html msg
+viewRow : Volume -> Entry -> List (Html msg)
 viewRow tankVolume entry =
     case entry of
         Single label value ->
             viewSingleEntry tankVolume label value
 
+        Compound label components ->
+            viewCompoundEntry tankVolume label components
 
-viewSingleEntry : Volume -> String -> Volume -> Html msg
+
+viewSingleEntry : Volume -> String -> Volume -> List (Html msg)
 viewSingleEntry tankVolume label volume =
     Html.tr []
         [ Html.td [] [ Html.text label ]
@@ -155,3 +161,30 @@ viewSingleEntry tankVolume label volume =
         , Html.td [] [ Html.text <| Volume.toString volume ]
         , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor volume tankVolume) Pressure.oneBar ]
         ]
+        |> List.singleton
+
+
+viewCompoundEntry : Volume -> String -> List ( String, Volume ) -> List (Html msg)
+viewCompoundEntry tankVolume label components =
+    let
+        total =
+            components
+                |> List.map Tuple.second
+                |> List.foldl Volume.add Volume.zeroLiter
+
+        viewSubEntry : ( String, Volume ) -> Html msg
+        viewSubEntry ( subLabel, subVolume ) =
+            Html.tr []
+                [ Html.td [] []
+                , Html.td [] [ Html.text subLabel ]
+                , Html.td [] [ Html.text <| Volume.toString subVolume ]
+                , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor subVolume tankVolume) Pressure.oneBar ]
+                ]
+    in
+    Html.tr []
+        [ Html.td [] [ Html.text label ]
+        , Html.td [] []
+        , Html.td [] [ Html.text <| Volume.toString <| total ]
+        , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor total tankVolume) Pressure.oneBar ]
+        ]
+        :: List.map viewSubEntry components

@@ -1,8 +1,13 @@
-module Measure.Volume exposing (Volume, add, factor, inLiters, liter, oneLiter, scale, toString)
+module Measure.Volume exposing (Volume, add, factor, inLiters, liter, oneLiter, scale, toString, zeroLiter)
 
 
 type Volume
     = Liter Float
+
+
+zeroLiter : Volume
+zeroLiter =
+    Liter 0
 
 
 oneLiter : Volume
