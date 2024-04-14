@@ -1,4 +1,4 @@
-module Measure.Sac exposing (Sac, atDepth, averageDuringRiseFrom, litersPerMinute, oneLiterPerMinute, times, toString)
+module Measure.Sac exposing (Sac, atDepth, averageBetweenSurfaceAnd, litersPerMinute, oneLiterPerMinute, times, toString)
 
 import Measure.Depth exposing (Depth)
 import Measure.Pressure as Pressure
@@ -48,8 +48,8 @@ atDepth depth (LitersPerMinute sac) =
     LitersPerMinute (factor * sac)
 
 
-averageDuringRiseFrom : Depth -> Sac -> Sac
-averageDuringRiseFrom depth sac =
+averageBetweenSurfaceAnd : Depth -> Sac -> Sac
+averageBetweenSurfaceAnd depth sac =
     let
         pressureAtSurface =
             Pressure.oneBar

@@ -64,7 +64,7 @@ details input =
         rise =
             input
                 |> Input.sacOf
-                |> Sac.averageDuringRiseFrom mdd
+                |> Sac.averageBetweenSurfaceAnd mdd
                 |> Sac.times (DiveTime.riseFrom mdd)
 
         minimum =
