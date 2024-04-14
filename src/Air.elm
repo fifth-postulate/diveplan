@@ -27,7 +27,7 @@ type Plan
         , rise : Volume
         , stop : Volume
         , total : Volume
-        , volume : Volume
+        , tankVolume : Volume
         }
 
 
@@ -38,7 +38,7 @@ details input =
             input
                 |> Input.mddOf
 
-        volume =
+        tankVolume =
             input
                 |> Input.tankOf
                 |> Tank.volume
@@ -88,23 +88,34 @@ details input =
         , rise = rise
         , stop = stop
         , total = total
-        , volume = volume
+        , tankVolume = tankVolume
         }
 
 
-entries : Labels -> Plan -> List ( String, Volume )
-entries labels (Plan { reserve, rise, minimum, halve, volume, stop, total }) =
-    [ ( labels.reserve, reserve )
-    , ( labels.rise, rise )
-    , ( labels.stop, stop )
-    , ( labels.minimum, minimum )
-    , ( labels.return, halve )
-    , ( labels.total, total )
+type Entry
+    = Single String Volume
+
+
+entries : Labels -> Plan -> List Entry
+entries labels (Plan { reserve, rise, minimum, halve, stop, total }) =
+    [ Single labels.reserve reserve
+    , Single labels.rise rise
+    , Single labels.stop stop
+    , Single labels.minimum minimum
+    , Single labels.return halve
+    , Single labels.total total
     ]
 
 
+volumeOf : Entry -> Volume
+volumeOf entry =
+    case entry of
+        Single _ v ->
+            v
+
+
 view : Labels -> Plan -> Html msg
-view labels ((Plan { volume }) as aPlan) =
+view labels ((Plan { tankVolume }) as aPlan) =
     let
         headerTdStyle : List Style
         headerTdStyle =
@@ -120,18 +131,27 @@ view labels ((Plan { volume }) as aPlan) =
         [ Html.thead [ Attribute.css [ fontWeight bold ] ]
             [ Html.tr []
                 [ Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.category ]
+                , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.subCategory ]
                 , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.volume ]
                 , Html.td [ Attribute.css headerTdStyle ] [ Html.text labels.pressure ]
                 ]
             ]
-        , Html.tbody [] (List.map (viewRow volume) rows)
+        , Html.tbody [] (List.map (viewRow tankVolume) rows)
         ]
 
 
-viewRow : Volume -> ( String, Volume ) -> Html msg
-viewRow volume ( label, value ) =
+viewRow : Volume -> Entry -> Html msg
+viewRow tankVolume entry =
+    case entry of
+        Single label value ->
+            viewSingleEntry tankVolume label value
+
+
+viewSingleEntry : Volume -> String -> Volume -> Html msg
+viewSingleEntry tankVolume label volume =
     Html.tr []
         [ Html.td [] [ Html.text label ]
-        , Html.td [] [ Html.text <| Volume.toString value ]
-        , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor value volume) Pressure.oneBar ]
+        , Html.td [] []
+        , Html.td [] [ Html.text <| Volume.toString volume ]
+        , Html.td [] [ Html.text <| Pressure.toString <| Pressure.scale (Volume.factor volume tankVolume) Pressure.oneBar ]
         ]

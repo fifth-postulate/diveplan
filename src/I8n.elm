@@ -12,6 +12,7 @@ type alias Labels =
     , rise : String
     , sac : String
     , stop : String
+    , subCategory : String
     , total : String
     , volume : String
     , waiting : String
@@ -30,6 +31,7 @@ en =
     , rise = "Rise"
     , sac = "SAC"
     , stop = "Safety stop"
+    , subCategory = "Sub-category"
     , total = "Total"
     , volume = "Volume"
     , waiting = "Waiting for correct input"
