@@ -1,4 +1,4 @@
-module Plan.DiveTime exposing (mdt, riseFrom)
+module Plan.DiveTime exposing (ascendFrom, mdt)
 
 import Basics
 import Measure.Depth as Depth exposing (Depth, meter)
@@ -48,8 +48,8 @@ mdt depth =
         |> Maybe.withDefault (Time.times 300 Time.oneMinute)
 
 
-riseFrom : Depth -> Time
-riseFrom depth =
+ascendFrom : Depth -> Time
+ascendFrom depth =
     depth
         |> Depth.inMeters
         |> divideBy 10

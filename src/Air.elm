@@ -24,7 +24,7 @@ type Plan
         { halve : Volume
         , minimum : Volume
         , reserve : Volume
-        , rise : Volume
+        , ascend : Volume
         , stop : Volume
         , total : Volume
         , tankVolume : Volume
@@ -61,15 +61,15 @@ details input =
                 |> Sac.atDepth fiveMeters
                 |> Sac.times threeMinutes
 
-        rise =
+        ascend =
             input
                 |> Input.sacOf
                 |> Sac.averageBetweenSurfaceAnd mdd
-                |> Sac.times (DiveTime.riseFrom mdd)
+                |> Sac.times (DiveTime.ascendFrom mdd)
 
         minimum =
             reserve
-                |> Volume.add rise
+                |> Volume.add ascend
                 |> Volume.add stop
 
         total =
@@ -85,7 +85,7 @@ details input =
         { halve = halve
         , minimum = minimum
         , reserve = reserve
-        , rise = rise
+        , ascend = ascend
         , stop = stop
         , total = total
         , tankVolume = tankVolume
@@ -98,8 +98,8 @@ type Entry
 
 
 entries : Labels -> Plan -> List Entry
-entries labels (Plan { reserve, rise, minimum, halve, stop, total }) =
-    [ Compound labels.minimum [ ( labels.reserve, reserve ), ( labels.rise, rise ), ( labels.stop, stop ) ]
+entries labels (Plan { reserve, ascend, minimum, halve, stop, total }) =
+    [ Compound labels.minimum [ ( labels.reserve, reserve ), ( labels.ascend, ascend ), ( labels.stop, stop ) ]
     , Single labels.return halve
     , Single labels.total total
     ]

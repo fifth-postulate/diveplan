@@ -9,7 +9,7 @@ type alias Labels =
     , pressure : String
     , reserve : String
     , return : String
-    , rise : String
+    , ascend : String
     , sac : String
     , stop : String
     , subCategory : String
@@ -28,7 +28,7 @@ en =
     , pressure = "Pressure"
     , reserve = "Reserve"
     , return = "Return"
-    , rise = "Rise"
+    , ascend = "Ascend"
     , sac = "SAC"
     , stop = "Safety stop"
     , subCategory = "Sub-category"
